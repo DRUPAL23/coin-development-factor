@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Coin Development Factory Tokenomics",
+  "type": "object",
+  "required": ["coin", "supply", "allocation"],
+  "properties": {
+    "coin": {
+      "type": "object",
+      "required": ["name", "symbol", "decimals"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "symbol": {"type": "string", "minLength": 1},
+        "decimals": {"type": "integer", "minimum": 0, "maximum": 36}
+      },
+      "additionalProperties": false
+    },
+    "supply": {
+      "type": "object",
+      "required": ["max", "initial"],
+      "properties": {
+        "max": {"type": "number", "exclusiveMinimum": 0},
+        "initial": {"type": "number", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "allocation": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"type": "number", "minimum": 0}
+    },
+    "vesting": {"type": "object"},
+    "mechanics": {"type": "object"}
+  },
+  "additionalProperties": false
+}
