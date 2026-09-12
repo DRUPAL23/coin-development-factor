@@ -1,0 +1,31 @@
+coin:
+  name: "Example Coin"
+  symbol: "EXC"
+  decimals: 18
+
+supply:
+  max: 1000000000
+  initial: 500000000
+
+allocation:
+  community: 30
+  ecosystem: 20
+  liquidity: 15
+  treasury: 10
+  team: 10
+  investors: 10
+  partnerships: 5
+
+vesting:
+  team:
+    cliff_months: 12
+    duration_months: 36
+  investors:
+    cliff_months: 6
+    duration_months: 24
+
+mechanics:
+  minting: false
+  burning: true
+  staking: true
+  governance: true
