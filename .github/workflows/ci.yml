@@ -26,3 +26,7 @@ jobs:
               raise SystemExit('\n'.join(errors))
           print('architecture configuration valid')
         PY
+      - run: python -m cli.smart_contract_cli validate config/examples/example-contract.yaml
+      - run: mkdir -p build/contracts
+      - run: python -m cli.smart_contract_cli generate config/examples/example-contract.yaml build/contracts/ExampleCoin.sol
+      - run: test -s build/contracts/ExampleCoin.sol
