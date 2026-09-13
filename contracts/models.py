@@ -47,6 +47,4 @@ class ContractSpec:
             errors.append("contract.contract_name must be a valid Solidity identifier")
         if not re.fullmatch(r"[A-Za-z][A-Za-z0-9 ._-]*", self.symbol):
             errors.append("contract.symbol contains unsupported characters")
-        if not self.minting and self.initial_supply != self.max_supply:
-            errors.append("fixed-supply contracts require initial_supply to equal max_supply")
         return errors
