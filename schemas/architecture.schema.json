@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Blockchain Architecture",
+  "type": "object",
+  "required": ["name", "network", "consensus"],
+  "properties": {
+    "name": {"type": "string", "minLength": 1},
+    "network": {
+      "type": "object",
+      "required": ["network_id", "chain_type"],
+      "properties": {
+        "network_id": {"type": "string", "minLength": 1},
+        "environment": {"type": "string", "enum": ["devnet", "testnet", "mainnet"]},
+        "native_symbol": {"type": "string", "minLength": 1},
+        "chain_type": {"type": "string", "enum": ["evm", "solana", "cosmos", "substrate", "sovereign"]}
+      },
+      "additionalProperties": false
+    },
+    "consensus": {
+      "type": "object",
+      "properties": {
+        "mechanism": {"type": "string", "enum": ["proof_of_stake", "proof_of_authority", "tendermint_bft", "nominated_proof_of_stake", "custom"]},
+        "block_time_seconds": {"type": "integer", "minimum": 1},
+        "finality_blocks": {"type": "integer", "minimum": 1},
+        "validator_minimum": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "execution": {"type": "object"},
+    "rpc": {"type": "object"},
+    "storage": {"type": "object"}
+  },
+  "additionalProperties": false
+}
