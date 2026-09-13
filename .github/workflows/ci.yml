@@ -18,3 +18,11 @@ jobs:
       - run: pip install -r requirements.txt
       - run: pytest -q
       - run: python -m cli.tokenomics_cli validate config/examples/example-coin.yaml
+      - run: python - <<'PY'
+          from architecture.engine import load_config
+          model = load_config('config/examples/example-architecture.yaml')
+          errors = model.validate()
+          if errors:
+              raise SystemExit('\n'.join(errors))
+          print('architecture configuration valid')
+        PY
