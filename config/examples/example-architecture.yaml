@@ -1,0 +1,22 @@
+name: Example Chain Architecture
+network:
+  network_id: example-testnet-1
+  environment: testnet
+  native_symbol: EXC
+  chain_type: evm
+consensus:
+  mechanism: proof_of_stake
+  block_time_seconds: 5
+  finality_blocks: 2
+  validator_minimum: 4
+execution:
+  vm: evm
+  smart_contracts: true
+  gas_model: dynamic
+rpc:
+  http: true
+  websocket: true
+  public: false
+storage:
+  engine: rocksdb
+  pruning: archive
