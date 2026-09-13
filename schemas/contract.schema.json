@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/DRUPAL23/coin-development-factor/schemas/contract.schema.json",
+  "title": "Smart Contract Specification",
+  "type": "object",
+  "required": ["contract"],
+  "properties": {
+    "contract": {
+      "type": "object",
+      "required": ["name", "symbol", "decimals", "initial_supply", "max_supply", "target", "contract_name"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "symbol": {"type": "string", "minLength": 1},
+        "decimals": {"type": "integer", "minimum": 0, "maximum": 36},
+        "initial_supply": {"type": "number", "minimum": 0},
+        "max_supply": {"type": "number", "exclusiveMinimum": 0},
+        "minting": {"type": "boolean"},
+        "burning": {"type": "boolean"},
+        "permit": {"type": "boolean"},
+        "target": {"const": "evm"},
+        "solidity_pragma": {"enum": ["^0.8.24", "^0.8.25", "^0.8.26"]},
+        "contract_name": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
