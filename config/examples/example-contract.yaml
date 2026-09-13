@@ -1,0 +1,12 @@
+contract:
+  name: "Example Coin"
+  symbol: "EXC"
+  decimals: 18
+  initial_supply: 500000000
+  max_supply: 1000000000
+  minting: false
+  burning: true
+  permit: true
+  target: "evm"
+  solidity_pragma: "^0.8.26"
+  contract_name: "ExampleCoin"
