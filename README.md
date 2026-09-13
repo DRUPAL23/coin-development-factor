@@ -6,31 +6,48 @@ A reusable framework for designing, validating, and eventually deploying crypto 
 
 Sprint 1 establishes the economic specification layer before smart-contract or blockchain implementation.
 
-### Scope
-
 - Supply configuration and validation
 - Allocation percentages and token quantities
 - Vesting schedules
 - Emission and burn configuration
-- Minting controls
-- Tokenomics consistency checks
 - Machine-readable YAML configuration
 - Python domain models and CLI foundation
 
-## Project status
+## Sprint 2 — Blockchain Architecture
 
-**Sprint 1: Tokenomics Engine — in development**
+Sprint 2 converts the economic specification into a machine-readable technical architecture contract.
 
-## Design principle
+### Scope
 
-Economic parameters are configuration, not hard-coded contract assumptions. The same specification should later feed contract generation, documentation, testing, deployment, and analytics.
+- Network identity and environment metadata
+- Chain type selection: EVM, Solana, Cosmos, Substrate, or sovereign
+- Consensus mechanism and safety parameters
+- Execution/runtime configuration
+- RPC exposure controls
+- Storage and pruning policy
+- Architecture validation and CI enforcement
 
-## Planned commands
+### Commands
 
 ```bash
 python -m cli.tokenomics_cli validate config/examples/example-coin.yaml
 python -m cli.tokenomics_cli calculate config/examples/example-coin.yaml
+python - <<'PY'
+from architecture.engine import load_config
+model = load_config('config/examples/example-architecture.yaml')
+print(model.validate())
+PY
 ```
+
+## Project status
+
+**Sprint 2: Blockchain Architecture — complete**
+
+Next: **Sprint 3 — Smart Contract Engine**.
+
+## Design principle
+
+Economic parameters are configuration, not hard-coded implementation assumptions. The same specification should feed contract generation, testing, deployment, and analytics.
 
 ## Disclaimer
 
