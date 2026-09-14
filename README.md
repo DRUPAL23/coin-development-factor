@@ -29,23 +29,28 @@ Sprint 2 converts the economic specification into a machine-readable technical a
 
 Sprint 3 converts a validated contract specification into deterministic Solidity source for an EVM ERC-20 deployment.
 
-### Scope
-
 - Typed smart-contract specification model
 - EVM target validation
 - Solidity compiler pragma allow-list
 - OpenZeppelin ERC-20 base implementation
-- Optional burnable extension
-- Optional EIP-2612 permit extension
+- Optional burnable and permit extensions
 - Optional owner-controlled minting with a hard maximum-supply cap
-- Initial supply minted to the deployer
-- Explicit token-decimal handling
 - Deterministic source generation
-- Generated-source structural validation
-- JSON Schema for contract configuration
 - CLI validation and generation
-- Unit tests for valid and invalid contract specifications
-- CI validation and generation smoke test
+
+## Sprint 4 — Testing & Security
+
+Sprint 4 hardens the generated-contract workflow with repeatable tests and conservative static security checks.
+
+### Scope
+
+- Security scanner for dangerous Solidity patterns
+- Blocking finding classification
+- Generated-source safety checks
+- Security scanning CLI
+- Unit tests for clean and malicious source samples
+- CI integration for generation plus security scan
+- Audit-readiness documentation and limitations
 
 ### Commands
 
@@ -67,19 +72,22 @@ python -m cli.smart_contract_cli generate \
   config/examples/example-contract.yaml \
   build/contracts/ExampleCoin.sol
 
+# Security scan
+python -m cli.security_cli build/contracts/ExampleCoin.sol
+
 # Full test suite
 pytest -q
 ```
 
-### Generated contract policy
+### Security policy
 
-The engine generates source code that imports OpenZeppelin Contracts rather than copying third-party library implementations into this repository. The generated source should be compiled against a pinned OpenZeppelin dependency and reviewed/audited before deployment. CI currently performs Python tests plus deterministic Solidity-source smoke validation; it does not treat source generation as a substitute for a compiler, audit, or deployment review.
+The scanner is intentionally conservative and lexical. It flags `tx.origin`, `delegatecall`, `selfdestruct`, and timestamp-dependent logic, and requires explicit supply-cap and initial-mint markers. A clean scan is not a formal audit, compiler proof, economic review, or deployment approval. Before deployment, pin dependencies, compile with a supported toolchain, run static analysis and fuzz/property tests, review privileged roles, and obtain an independent security assessment.
 
 ## Project status
 
-**Sprint 3: Smart Contract Engine — complete**
+**Sprint 4: Testing & Security — complete**
 
-Next: **Sprint 4 — Testing & Security**.
+Next: **Sprint 5 — Wallet Infrastructure**.
 
 ## Design principle
 
