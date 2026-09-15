@@ -4,8 +4,6 @@ A reusable framework for designing, validating, and eventually deploying crypto 
 
 ## Sprint 1 — Tokenomics Engine
 
-Sprint 1 establishes the economic specification layer before smart-contract or blockchain implementation.
-
 - Supply configuration and validation
 - Allocation percentages and token quantities
 - Vesting schedules
@@ -14,8 +12,6 @@ Sprint 1 establishes the economic specification layer before smart-contract or b
 - Python domain models and CLI foundation
 
 ## Sprint 2 — Blockchain Architecture
-
-Sprint 2 converts the economic specification into a machine-readable technical architecture contract.
 
 - Network identity and environment metadata
 - Chain type selection: EVM, Solana, Cosmos, Substrate, or sovereign
@@ -27,67 +23,52 @@ Sprint 2 converts the economic specification into a machine-readable technical a
 
 ## Sprint 3 — Smart Contract Engine
 
-Sprint 3 converts a validated contract specification into deterministic Solidity source for an EVM ERC-20 deployment.
-
-- Typed smart-contract specification model
-- EVM target validation
-- Solidity compiler pragma allow-list
-- OpenZeppelin ERC-20 base implementation
-- Optional burnable and permit extensions
-- Optional owner-controlled minting with a hard maximum-supply cap
-- Deterministic source generation
-- CLI validation and generation
+- Deterministic OpenZeppelin-based ERC-20 generation
+- Burnable, permit, and capped minting options
+- Supply precision and Solidity identifier validation
+- Contract CLI and JSON Schema
 
 ## Sprint 4 — Testing & Security
 
-Sprint 4 hardens the generated-contract workflow with repeatable tests and conservative static security checks.
+- Conservative Solidity static checks
+- Blocking finding classification
+- Security scan CLI
+- Generated-source CI smoke validation
+- Audit-readiness documentation and limitations
+
+## Sprint 5 — Wallet Infrastructure
+
+Sprint 5 defines a non-custodial wallet policy layer for EVM deployments. It deliberately does not generate or store private keys, seed phrases, or keystores.
 
 ### Scope
 
-- Security scanner for dangerous Solidity patterns
-- Blocking finding classification
-- Generated-source safety checks
-- Security scanning CLI
-- Unit tests for clean and malicious source samples
-- CI integration for generation plus security scan
-- Audit-readiness documentation and limitations
+- Wallet policy model for browser, mobile, hardware, and external custody workflows
+- EVM chain validation
+- BIP-44-style derivation-path validation
+- 20-byte EVM address validation
+- Hardware-signing enforcement
+- Private-key export prohibition for hardware policies
+- Wallet policy YAML loader and CLI
+- Wallet policy JSON Schema
+- Unit tests and CI validation
 
 ### Commands
 
 ```bash
-# Tokenomics
-python -m cli.tokenomics_cli validate config/examples/example-coin.yaml
-python -m cli.tokenomics_cli calculate config/examples/example-coin.yaml
-
-# Architecture
-python - <<'PY'
-from architecture.engine import load_config
-model = load_config('config/examples/example-architecture.yaml')
-print(model.validate())
-PY
-
-# Smart contract
-python -m cli.smart_contract_cli validate config/examples/example-contract.yaml
-python -m cli.smart_contract_cli generate \
-  config/examples/example-contract.yaml \
-  build/contracts/ExampleCoin.sol
-
-# Security scan
-python -m cli.security_cli build/contracts/ExampleCoin.sol
-
-# Full test suite
+python -m cli.wallet_cli config/examples/example-wallet.yaml
+python -m cli.wallet_cli config/examples/example-wallet.yaml --json
 pytest -q
 ```
 
-### Security policy
+### Operational security policy
 
-The scanner is intentionally conservative and lexical. It flags `tx.origin`, `delegatecall`, `selfdestruct`, and timestamp-dependent logic, and requires explicit supply-cap and initial-mint markers. A clean scan is not a formal audit, compiler proof, economic review, or deployment approval. Before deployment, pin dependencies, compile with a supported toolchain, run static analysis and fuzz/property tests, review privileged roles, and obtain an independent security assessment.
+Private keys and seed phrases must never be committed to the repository, passed through CI logs, or handled by this configuration layer. Use hardware-wallet signing or an audited external custody provider for production operations. Address ownership, chain ID, transaction simulation, nonce management, and human approval remain deployment-time controls.
 
 ## Project status
 
-**Sprint 4: Testing & Security — complete**
+**Sprint 5: Wallet Infrastructure — complete**
 
-Next: **Sprint 5 — Wallet Infrastructure**.
+Next: **Sprint 6 — Backend/API**.
 
 ## Design principle
 
