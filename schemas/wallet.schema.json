@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/DRUPAL23/coin-development-factor/schemas/wallet.schema.json",
+  "title": "Wallet Policy Specification",
+  "type": "object",
+  "required": ["wallet"],
+  "properties": {
+    "wallet": {
+      "type": "object",
+      "required": ["name", "wallet_type", "chain", "derivation_path"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "wallet_type": {"enum": ["browser", "hardware", "mobile", "custody_external"]},
+        "chain": {"const": "evm"},
+        "derivation_path": {"type": "string", "pattern": "^m(?:/[0-9]+'?)+$"},
+        "require_hardware_signing": {"type": "boolean"},
+        "allow_private_key_export": {"type": "boolean"},
+        "address": {"type": "string", "pattern": "^0x[a-fA-F0-9]{40}$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
