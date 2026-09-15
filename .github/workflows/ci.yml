@@ -35,4 +35,5 @@ jobs:
       - run: mkdir -p build/contracts
       - run: python -m cli.smart_contract_cli generate config/examples/example-contract.yaml build/contracts/ExampleCoin.sol
       - run: python -m cli.security_cli build/contracts/ExampleCoin.sol
+      - run: python -m cli.wallet_cli config/examples/example-wallet.yaml
       - run: test -s build/contracts/ExampleCoin.sol
