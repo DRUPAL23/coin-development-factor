@@ -1,0 +1,8 @@
+wallet:
+  name: "Example Treasury Wallet"
+  wallet_type: "hardware"
+  chain: "evm"
+  derivation_path: "m/44'/60'/0'/0/0"
+  require_hardware_signing: true
+  allow_private_key_export: false
+  address: "0x0000000000000000000000000000000000000001"
