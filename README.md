@@ -2,73 +2,55 @@
 
 A reusable framework for designing, validating, and eventually deploying crypto token and native-coin projects.
 
-## Sprint 1 — Tokenomics Engine
+## Completed sprints
 
-- Supply configuration and validation
-- Allocation percentages and token quantities
-- Vesting schedules
-- Emission and burn configuration
-- Machine-readable YAML configuration
-- Python domain models and CLI foundation
+- **Sprint 1 — Tokenomics Engine:** supply, allocations, vesting, and mechanics.
+- **Sprint 2 — Blockchain Architecture:** network, consensus, execution, RPC, and storage policy.
+- **Sprint 3 — Smart Contract Engine:** deterministic OpenZeppelin ERC-20 generation.
+- **Sprint 4 — Testing & Security:** conservative Solidity static checks and CI enforcement.
+- **Sprint 5 — Wallet Infrastructure:** non-custodial wallet policy validation.
 
-## Sprint 2 — Blockchain Architecture
+## Sprint 6 — Backend/API
 
-- Network identity and environment metadata
-- Chain type selection: EVM, Solana, Cosmos, Substrate, or sovereign
-- Consensus mechanism and safety parameters
-- Execution/runtime configuration
-- RPC exposure controls
-- Storage and pruning policy
-- Architecture validation and CI enforcement
-
-## Sprint 3 — Smart Contract Engine
-
-- Deterministic OpenZeppelin-based ERC-20 generation
-- Burnable, permit, and capped minting options
-- Supply precision and Solidity identifier validation
-- Contract CLI and JSON Schema
-
-## Sprint 4 — Testing & Security
-
-- Conservative Solidity static checks
-- Blocking finding classification
-- Security scan CLI
-- Generated-source CI smoke validation
-- Audit-readiness documentation and limitations
-
-## Sprint 5 — Wallet Infrastructure
-
-Sprint 5 defines a non-custodial wallet policy layer for EVM deployments. It deliberately does not generate or store private keys, seed phrases, or keystores.
+Sprint 6 exposes the validated project specifications through a small, testable FastAPI service.
 
 ### Scope
 
-- Wallet policy model for browser, mobile, hardware, and external custody workflows
-- EVM chain validation
-- BIP-44-style derivation-path validation
-- 20-byte EVM address validation
-- Hardware-signing enforcement
-- Private-key export prohibition for hardware policies
-- Wallet policy YAML loader and CLI
-- Wallet policy JSON Schema
-- Unit tests and CI validation
+- FastAPI application with versioned `/v1` endpoints
+- `/health` liveness endpoint
+- tokenomics, architecture, wallet, and example-contract read endpoints
+- aggregate `/v1/validate` endpoint for cross-layer configuration validation
+- Pydantic response contract for validation results
+- API tests using FastAPI's TestClient
+- CI dependency installation, test execution, and API smoke test
 
-### Commands
+### Run locally
 
 ```bash
-python -m cli.wallet_cli config/examples/example-wallet.yaml
-python -m cli.wallet_cli config/examples/example-wallet.yaml --json
-pytest -q
+pip install -r requirements.txt
+uvicorn api.app:app --reload
 ```
 
-### Operational security policy
+API documentation is available from FastAPI at `/docs` and `/redoc` when the service is running.
 
-Private keys and seed phrases must never be committed to the repository, passed through CI logs, or handled by this configuration layer. Use hardware-wallet signing or an audited external custody provider for production operations. Address ownership, chain ID, transaction simulation, nonce management, and human approval remain deployment-time controls.
+### Endpoints
+
+```text
+GET /health
+GET /v1/tokenomics
+GET /v1/architecture
+GET /v1/wallets
+GET /v1/contracts/example
+GET /v1/validate
+```
+
+The current API reads repository example configurations intentionally. Authentication, persistence, rate limiting, chain RPC integration, transaction submission, and secrets management remain outside this sprint and must be designed before production exposure.
 
 ## Project status
 
-**Sprint 5: Wallet Infrastructure — complete**
+**Sprint 6: Backend/API — complete**
 
-Next: **Sprint 6 — Backend/API**.
+Next: **Sprint 7 — Explorer & Indexer**.
 
 ## Design principle
 
