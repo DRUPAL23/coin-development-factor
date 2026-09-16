@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
 from architecture.engine import load_config as load_architecture
@@ -12,17 +12,12 @@ from tokenomics.engine import calculate as calculate_tokenomics
 from wallets.engine import load_config as load_wallets
 
 ROOT = Path(__file__).resolve().parents[1]
-app = FastAPI(title="Coin Development Factory API", version="0.6.0")
+app = FastAPI(title="Coin Development Factory API", version="0.6.1")
 
 
 class ValidationResponse(BaseModel):
     valid: bool
     errors: list[str] = Field(default_factory=list)
-
-
-def _validate_model(model: Any) -> ValidationResponse:
-    errors = model.validate()
-    return ValidationResponse(valid=not errors, errors=errors)
 
 
 @app.get("/health")
@@ -32,8 +27,7 @@ def health() -> dict[str, str]:
 
 @app.get("/v1/tokenomics")
 def tokenomics() -> dict[str, Any]:
-    path = ROOT / "config/examples/example-coin.yaml"
-    return calculate_tokenomics(path)
+    return calculate_tokenomics(ROOT / "config/examples/example-coin.yaml")
 
 
 @app.get("/v1/architecture")
@@ -45,7 +39,7 @@ def architecture() -> dict[str, Any]:
 @app.get("/v1/wallets")
 def wallets() -> dict[str, Any]:
     model = load_wallets(ROOT / "config/examples/example-wallet.yaml")
-    return {"wallet_type": model.wallet_type, "target": model.target, "validation_errors": model.validate()}
+    return {"wallet_type": model.wallet_type, "chain": model.chain, "validation_errors": model.validate()}
 
 
 @app.get("/v1/contracts/example")
