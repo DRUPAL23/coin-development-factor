@@ -11,7 +11,7 @@ from contracts.engine import generate_erc20, load_spec as load_contract
 from explorer.indexer import Indexer
 from explorer.models import Block
 from tokenomics.engine import calculate as calculate_tokenomics
-from wallets.engine import load_config as load_wallets
+from wallets.engine import load_spec as load_wallets
 
 ROOT = Path(__file__).resolve().parents[1]
 app = FastAPI(title="Coin Development Factory API", version="0.7.0")
