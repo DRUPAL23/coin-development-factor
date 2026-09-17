@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/DRUPAL23/coin-development-factor/schemas/explorer.schema.json",
+  "title": "Explorer block and transaction read model",
+  "type": "object",
+  "required": ["number", "block_hash", "parent_hash", "timestamp", "transaction_count"],
+  "properties": {
+    "number": {"type": "integer", "minimum": 0},
+    "block_hash": {"type": "string", "pattern": "^0x[0-9a-fA-F]{64}$"},
+    "parent_hash": {"type": "string", "pattern": "^0x[0-9a-fA-F]{64}$"},
+    "timestamp": {"type": "integer", "minimum": 1},
+    "transaction_count": {"type": "integer", "minimum": 0}
+  },
+  "additionalProperties": false
+}
