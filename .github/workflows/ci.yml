@@ -36,12 +36,16 @@ jobs:
       - run: python -m cli.smart_contract_cli generate config/examples/example-contract.yaml build/contracts/ExampleCoin.sol
       - run: python -m cli.security_cli scan build/contracts/ExampleCoin.sol
       - run: python -m cli.wallet_cli config/examples/example-wallet.yaml
-      - run: python - <<'PY'
+      - run: python -m cli.explorer_cli --json
+      - name: API smoke test
+        run: |
+          python - <<'PY'
           from fastapi.testclient import TestClient
           from api.app import app
-          response = TestClient(app).get('/v1/validate')
-          assert response.status_code == 200
-          assert response.json()['valid'] is True
+          client = TestClient(app)
+          assert client.get('/v1/validate').json()['valid'] is True
+          assert client.get('/v1/explorer/status').json()['indexed'] is True
+          assert client.get('/v1/explorer/blocks/0').status_code == 200
           print('API smoke test passed')
-        PY
+          PY
       - run: test -s build/contracts/ExampleCoin.sol
