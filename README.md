@@ -9,48 +9,48 @@ A reusable framework for designing, validating, and eventually deploying crypto 
 - **Sprint 3 — Smart Contract Engine:** deterministic OpenZeppelin ERC-20 generation.
 - **Sprint 4 — Testing & Security:** conservative Solidity static checks and CI enforcement.
 - **Sprint 5 — Wallet Infrastructure:** non-custodial wallet policy validation.
+- **Sprint 6 — Backend/API:** versioned FastAPI service for validated project specifications.
 
-## Sprint 6 — Backend/API
+## Sprint 7 — Explorer & Indexer
 
-Sprint 6 exposes the validated project specifications through a small, testable FastAPI service.
+Sprint 7 adds a deterministic explorer read model and a SQLite-backed index store for blocks and transactions.
 
 ### Scope
 
-- FastAPI application with versioned `/v1` endpoints
-- `/health` liveness endpoint
-- tokenomics, architecture, wallet, and example-contract read endpoints
-- aggregate `/v1/validate` endpoint for cross-layer configuration validation
-- Pydantic response contract for validation results
-- API tests using FastAPI's TestClient
-- CI dependency installation, test execution, and API smoke test
+- typed block and transaction read models
+- structural validation for hashes, addresses, timestamps, and status
+- SQLite persistence with indexes for block number and transaction address lookups
+- deterministic indexer service enforcing block/transaction relationships
+- explorer CLI smoke command
+- API endpoints for indexer status, block lookup, and transaction listing
+- explorer JSON Schema
+- unit tests for round trips and invalid relationship handling
+- CI validation and API smoke tests
 
-### Run locally
+### Commands
 
 ```bash
 pip install -r requirements.txt
+pytest -q
+python -m cli.explorer_cli --json
 uvicorn api.app:app --reload
 ```
 
-API documentation is available from FastAPI at `/docs` and `/redoc` when the service is running.
-
-### Endpoints
+### Explorer API
 
 ```text
-GET /health
-GET /v1/tokenomics
-GET /v1/architecture
-GET /v1/wallets
-GET /v1/contracts/example
-GET /v1/validate
+GET /v1/explorer/status
+GET /v1/explorer/blocks/{number}
+GET /v1/explorer/transactions?address=0x...&limit=50
 ```
 
-The current API reads repository example configurations intentionally. Authentication, persistence, rate limiting, chain RPC integration, transaction submission, and secrets management remain outside this sprint and must be designed before production exposure.
+The current indexer is intentionally a deterministic local read-model component. It does not connect to a live chain RPC, handle reorg resolution, decode arbitrary event ABIs, or expose authenticated production ingestion. Those concerns belong in the next infrastructure stages and must be designed before public deployment.
 
 ## Project status
 
-**Sprint 6: Backend/API — complete**
+**Sprint 7: Explorer & Indexer — complete**
 
-Next: **Sprint 7 — Explorer & Indexer**.
+Next: **Sprint 8 — Staking**.
 
 ## Design principle
 
