@@ -1,0 +1,8 @@
+staking:
+  enabled: true
+  min_stake: 100
+  unbonding_period_days: 7
+  reward_rate_annual: "0.10"
+  commission_rate: "0.05"
+  max_validators: 100
+  reward_asset: native
