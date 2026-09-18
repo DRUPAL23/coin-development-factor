@@ -10,47 +10,50 @@ A reusable framework for designing, validating, and eventually deploying crypto 
 - **Sprint 4 — Testing & Security:** conservative Solidity static checks and CI enforcement.
 - **Sprint 5 — Wallet Infrastructure:** non-custodial wallet policy validation.
 - **Sprint 6 — Backend/API:** versioned FastAPI service for validated project specifications.
+- **Sprint 7 — Explorer & Indexer:** deterministic block/transaction read model with SQLite persistence.
 
-## Sprint 7 — Explorer & Indexer
+## Sprint 8 — Staking
 
-Sprint 7 adds a deterministic explorer read model and a SQLite-backed index store for blocks and transactions.
+Sprint 8 adds a validated staking policy layer and deterministic reward calculations for delegation planning and API consumption.
 
 ### Scope
 
-- typed block and transaction read models
-- structural validation for hashes, addresses, timestamps, and status
-- SQLite persistence with indexes for block number and transaction address lookups
-- deterministic indexer service enforcing block/transaction relationships
-- explorer CLI smoke command
-- API endpoints for indexer status, block lookup, and transaction listing
-- explorer JSON Schema
-- unit tests for round trips and invalid relationship handling
-- CI validation and API smoke tests
+- staking policy model and validation
+- minimum stake and unbonding-period rules
+- annual reward-rate and validator commission controls
+- maximum-validator policy
+- native/custom reward-asset selection
+- delegation input validation
+- gross reward, commission, and net reward calculation
+- staking CLI validation and reward calculator
+- staking JSON Schema
+- API endpoints for policy and reward estimation
+- unit tests and CI smoke coverage
 
 ### Commands
 
 ```bash
 pip install -r requirements.txt
 pytest -q
-python -m cli.explorer_cli --json
+python -m cli.staking_cli validate config/examples/example-staking.yaml
+python -m cli.staking_cli reward config/examples/example-staking.yaml 1000 365
 uvicorn api.app:app --reload
 ```
 
-### Explorer API
+### Staking API
 
 ```text
-GET /v1/explorer/status
-GET /v1/explorer/blocks/{number}
-GET /v1/explorer/transactions?address=0x...&limit=50
+GET /v1/staking
+GET /v1/staking/reward?amount=1000&duration_days=365
 ```
 
-The current indexer is intentionally a deterministic local read-model component. It does not connect to a live chain RPC, handle reorg resolution, decode arbitrary event ABIs, or expose authenticated production ingestion. Those concerns belong in the next infrastructure stages and must be designed before public deployment.
+Reward calculations are deterministic planning utilities. They do not perform on-chain staking, custody assets, select validators, guarantee yield, or replace protocol-level accounting and security review. Commission and reward semantics must be reconciled with the final chain runtime or smart contract implementation before deployment.
 
 ## Project status
 
-**Sprint 7: Explorer & Indexer — complete**
+**Sprint 8: Staking — complete**
 
-Next: **Sprint 8 — Staking**.
+Next: **Sprint 9 — Governance**.
 
 ## Design principle
 
