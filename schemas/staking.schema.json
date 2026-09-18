@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Staking Policy",
+  "type": "object",
+  "required": ["staking"],
+  "properties": {"staking": {"type": "object", "required": ["enabled", "min_stake", "unbonding_period_days", "reward_rate_annual", "commission_rate", "max_validators", "reward_asset"], "properties": {"enabled": {"type": "boolean"}, "min_stake": {"type": "number", "exclusiveMinimum": 0}, "unbonding_period_days": {"type": "integer", "minimum": 0}, "reward_rate_annual": {"type": "number", "minimum": 0, "maximum": 1}, "commission_rate": {"type": "number", "minimum": 0, "exclusiveMaximum": 1}, "max_validators": {"type": "integer", "minimum": 1}, "reward_asset": {"enum": ["native", "custom"]}}, "additionalProperties": false}},
+  "additionalProperties": false
+}
