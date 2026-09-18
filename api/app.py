@@ -10,11 +10,12 @@ from architecture.engine import load_config as load_architecture
 from contracts.engine import generate_erc20, load_spec as load_contract
 from explorer.indexer import Indexer
 from explorer.models import Block
+from staking.engine import calculate_reward, load_policy
 from tokenomics.engine import calculate as calculate_tokenomics
 from wallets.engine import load_spec as load_wallets
 
 ROOT = Path(__file__).resolve().parents[1]
-app = FastAPI(title="Coin Development Factory API", version="0.7.0")
+app = FastAPI(title="Coin Development Factory API", version="0.8.0")
 EXPLORER = Indexer()
 EXPLORER.add_block(Block(0, "0x" + "0" * 64, "0x" + "0" * 64, 1, 0))
 
@@ -52,6 +53,22 @@ def example_contract() -> dict[str, Any]:
     return {"contract_name": spec.contract_name, "target": spec.target, "validation_errors": spec.validate(), "source": generate_erc20(spec)}
 
 
+@app.get("/v1/staking")
+def staking() -> dict[str, Any]:
+    policy = load_policy(ROOT / "config/examples/example-staking.yaml")
+    return {"enabled": policy.enabled, "min_stake": str(policy.min_stake), "unbonding_period_days": policy.unbonding_period_days, "reward_rate_annual": str(policy.reward_rate_annual), "commission_rate": str(policy.commission_rate), "max_validators": policy.max_validators, "validation_errors": policy.validate()}
+
+
+@app.get("/v1/staking/reward")
+def staking_reward(amount: str = Query(...), duration_days: int = Query(..., ge=0)) -> dict[str, str]:
+    policy = load_policy(ROOT / "config/examples/example-staking.yaml")
+    try:
+        from decimal import Decimal
+        return calculate_reward(policy, Decimal(amount), duration_days)
+    except (ValueError, ArithmeticError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
 @app.get("/v1/validate", response_model=ValidationResponse)
 def validate_all() -> ValidationResponse:
     errors: list[str] = []
@@ -59,6 +76,7 @@ def validate_all() -> ValidationResponse:
         load_architecture(ROOT / "config/examples/example-architecture.yaml"),
         load_wallets(ROOT / "config/examples/example-wallet.yaml"),
         load_contract(ROOT / "config/examples/example-contract.yaml"),
+        load_policy(ROOT / "config/examples/example-staking.yaml"),
     ]:
         errors.extend(model.validate())
     return ValidationResponse(valid=not errors, errors=errors)
