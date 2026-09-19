@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/DRUPAL23/coin-development-factor/schemas/governance.schema.json",
+  "title": "Governance Policy",
+  "type": "object",
+  "required": ["governance"],
+  "properties": {
+    "governance": {
+      "type": "object",
+      "required": ["voting_model", "proposal_threshold", "quorum", "approval_threshold", "voting_period_days", "timelock_days", "execution_delay_days"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "voting_model": {"enum": ["token", "quadratic", "one_wallet_one_vote"]},
+        "proposal_threshold": {"type": "number", "minimum": 0},
+        "quorum": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "approval_threshold": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "voting_period_days": {"type": "integer", "minimum": 1},
+        "timelock_days": {"type": "integer", "minimum": 0},
+        "execution_delay_days": {"type": "integer", "minimum": 0},
+        "proposer_whitelist_enabled": {"type": "boolean"},
+        "guardian_enabled": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
