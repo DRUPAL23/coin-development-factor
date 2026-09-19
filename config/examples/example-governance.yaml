@@ -1,0 +1,11 @@
+governance:
+  enabled: true
+  voting_model: "token"
+  proposal_threshold: 1000
+  quorum: 0.20
+  approval_threshold: 0.50
+  voting_period_days: 7
+  timelock_days: 2
+  execution_delay_days: 2
+  proposer_whitelist_enabled: false
+  guardian_enabled: true
