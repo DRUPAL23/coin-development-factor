@@ -53,6 +53,7 @@ class AceCoinTestnet(AceCoinBase):
     SHORTNAME = "tACE"
     NET = "testnet"
     RPC_PORT = int(os.getenv("ACECOIN_TESTNET_RPC_PORT", "19332"))
+    GENESIS_HASH = os.getenv("ACECOIN_TESTNET_GENESIS_HASH", "0" * 64)
 
     P2PKH_VERBYTE = _hex_bytes("ACECOIN_TESTNET_P2PKH_VERBYTE", "6f")
     P2SH_VERBYTES = (_hex_bytes("ACECOIN_TESTNET_P2SH_VERBYTE", "c4"),)
