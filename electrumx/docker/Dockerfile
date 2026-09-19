@@ -22,9 +22,9 @@ RUN git clone --depth 1 --branch "$ELECTRUMX_REF" https://github.com/spesmilo/el
 
 RUN python -m pip install --no-cache-dir ".[rocksdb,orjson]"
 
-COPY electrumx/coin /opt/acecoin/electrumx/coin
-COPY electrumx/python/sitecustomize.py /opt/acecoin/sitecustomize.py
-COPY electrumx/docker/entrypoint.sh /entrypoint.sh
+COPY coin /opt/acecoin/electrumx/coin
+COPY python/sitecustomize.py /opt/acecoin/sitecustomize.py
+COPY docker/entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh \
     && useradd --create-home --uid 10001 --shell /usr/sbin/nologin electrumx \
