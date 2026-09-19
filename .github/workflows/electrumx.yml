@@ -1,0 +1,27 @@
+name: ElectrumX integration
+
+on:
+  push:
+    branches: [main, "feature/**"]
+    paths:
+      - "electrumx/**"
+      - ".github/workflows/electrumx.yml"
+  pull_request:
+    paths:
+      - "electrumx/**"
+      - ".github/workflows/electrumx.yml"
+
+jobs:
+  coin-class:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install ElectrumX test dependencies
+        run: python -m pip install -r electrumx/requirements-test.txt
+      - name: Test AceCoin coin registration
+        env:
+          PYTHONPATH: ${{ github.workspace }}/electrumx/python:${{ github.workspace }}/electrumx
+        run: pytest -q electrumx/tests/test_coin.py
