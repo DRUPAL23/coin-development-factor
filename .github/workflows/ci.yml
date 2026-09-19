@@ -39,6 +39,8 @@ jobs:
       - run: python -m cli.explorer_cli --json
       - run: python -m cli.staking_cli validate config/examples/example-staking.yaml
       - run: python -m cli.staking_cli reward config/examples/example-staking.yaml 1000 365
+      - run: python -m cli.governance_cli validate config/examples/example-governance.yaml
+      - run: python -m cli.governance_cli evaluate config/examples/example-governance.yaml p-001 'Increase treasury budget' treasury_spend alice 2000 10000 3000 1000
       - name: API smoke test
         run: |
           python - <<'PY'
@@ -50,6 +52,8 @@ jobs:
           assert client.get('/v1/explorer/blocks/0').status_code == 200
           assert client.get('/v1/staking').json()['validation_errors'] == []
           assert client.get('/v1/staking/reward?amount=1000&duration_days=365').status_code == 200
+          assert client.get('/v1/governance').json()['validation_errors'] == []
+          assert client.get('/v1/governance/evaluate?proposal_id=p-001&title=Increase%20treasury%20budget&proposal_type=treasury_spend&proposer=alice&voting_power=2000&total_voting_power=10000&yes_votes=3000&no_votes=1000').json()['outcome'] == 'passed'
           print('API smoke test passed')
           PY
       - run: test -s build/contracts/ExampleCoin.sol
