@@ -1,0 +1,38 @@
+services:
+  acecoin-electrumx-testnet:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        ELECTRUMX_REF: master
+    restart: unless-stopped
+    env_file:
+      - ../.env.testnet
+    environment:
+      COIN: AceCoin
+      NET: testnet
+      DB_DIRECTORY: /data/electrumx
+      DB_ENGINE: rocksdb
+      SERVICES: ssl://0.0.0.0:50002,rpc://127.0.0.1:8000
+      REPORT_SERVICES: ssl://electrum-testnet.example.org:50002
+      SSL_CERTFILE: /certs/server.crt
+      SSL_KEYFILE: /certs/server.key
+      LOG_LEVEL: info
+    volumes:
+      - electrumx-testnet-db:/data/electrumx
+      - ../certs:/certs:ro
+    ports:
+      - "50002:50002"
+    ulimits:
+      nofile:
+        soft: 100000
+        hard: 100000
+    healthcheck:
+      test: ["CMD-SHELL", "python /opt/electrumx/electrumx_rpc getinfo >/dev/null 2>&1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+volumes:
+  electrumx-testnet-db:
