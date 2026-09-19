@@ -10,6 +10,7 @@ RUN apt-get update \
        librocksdb-dev \
        pkg-config \
        ca-certificates \
+       git \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/electrumx
@@ -25,7 +26,8 @@ COPY electrumx/coin /opt/acecoin/electrumx/coin
 COPY electrumx/python/sitecustomize.py /opt/acecoin/sitecustomize.py
 COPY electrumx/docker/entrypoint.sh /entrypoint.sh
 
-RUN useradd --create-home --uid 10001 --shell /usr/sbin/nologin electrumx \
+RUN chmod +x /entrypoint.sh \
+    && useradd --create-home --uid 10001 --shell /usr/sbin/nologin electrumx \
     && mkdir -p /data/electrumx /certs \
     && chown -R electrumx:electrumx /data/electrumx /certs /opt/acecoin
 
