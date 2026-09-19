@@ -11,23 +11,25 @@ A reusable framework for designing, validating, and eventually deploying crypto 
 - **Sprint 5 — Wallet Infrastructure:** non-custodial wallet policy validation.
 - **Sprint 6 — Backend/API:** versioned FastAPI service for validated project specifications.
 - **Sprint 7 — Explorer & Indexer:** deterministic block/transaction read model with SQLite persistence.
+- **Sprint 8 — Staking:** validated staking policy and deterministic reward calculations.
 
-## Sprint 8 — Staking
+## Sprint 9 — Governance
 
-Sprint 8 adds a validated staking policy layer and deterministic reward calculations for delegation planning and API consumption.
+Sprint 9 adds a policy-driven governance layer for proposal eligibility, quorum, approval thresholds, cancellation, and timelock planning.
 
 ### Scope
 
-- staking policy model and validation
-- minimum stake and unbonding-period rules
-- annual reward-rate and validator commission controls
-- maximum-validator policy
-- native/custom reward-asset selection
-- delegation input validation
-- gross reward, commission, and net reward calculation
-- staking CLI validation and reward calculator
-- staking JSON Schema
-- API endpoints for policy and reward estimation
+- governance policy model and validation
+- token, quadratic, and one-wallet-one-vote policy identifiers
+- proposal threshold validation
+- quorum and approval-threshold validation
+- voting-period and timelock controls
+- proposal model with typed proposal categories
+- proposer, voting-power, and vote-bound validation
+- deterministic outcomes: passed, rejected, quorum_not_met, cancelled, invalid
+- governance CLI validation and proposal evaluation
+- governance JSON Schema
+- API endpoints for policy and proposal evaluation
 - unit tests and CI smoke coverage
 
 ### Commands
@@ -35,25 +37,26 @@ Sprint 8 adds a validated staking policy layer and deterministic reward calculat
 ```bash
 pip install -r requirements.txt
 pytest -q
-python -m cli.staking_cli validate config/examples/example-staking.yaml
-python -m cli.staking_cli reward config/examples/example-staking.yaml 1000 365
+python -m cli.governance_cli validate config/examples/example-governance.yaml
+python -m cli.governance_cli evaluate config/examples/example-governance.yaml p-001 \
+  "Increase treasury budget" treasury_spend alice 2000 10000 3000 1000
 uvicorn api.app:app --reload
 ```
 
-### Staking API
+### Governance API
 
 ```text
-GET /v1/staking
-GET /v1/staking/reward?amount=1000&duration_days=365
+GET /v1/governance
+GET /v1/governance/evaluate?proposal_id=p-001&title=Increase%20treasury%20budget&proposal_type=treasury_spend&proposer=alice&voting_power=2000&total_voting_power=10000&yes_votes=3000&no_votes=1000
 ```
 
-Reward calculations are deterministic planning utilities. They do not perform on-chain staking, custody assets, select validators, guarantee yield, or replace protocol-level accounting and security review. Commission and reward semantics must be reconciled with the final chain runtime or smart contract implementation before deployment.
+Governance evaluation is a deterministic planning and validation utility. It does not execute on-chain proposals, custody voting assets, authenticate wallets, prevent sybil attacks, or replace protocol-level governance contracts, snapshot logic, or security review. Timelock and guardian controls must be reconciled with the final runtime before deployment.
 
 ## Project status
 
-**Sprint 8: Staking — complete**
+**Sprint 9: Governance — complete**
 
-Next: **Sprint 9 — Governance**.
+Next: **Sprint 10 — DEX/Liquidity**.
 
 ## Design principle
 
