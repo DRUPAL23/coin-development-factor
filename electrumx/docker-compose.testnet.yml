@@ -7,7 +7,7 @@ services:
         ELECTRUMX_REF: master
     restart: unless-stopped
     env_file:
-      - ../.env.testnet
+      - ./.env.testnet
     environment:
       COIN: AceCoin
       NET: testnet
