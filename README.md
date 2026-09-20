@@ -12,24 +12,23 @@ A reusable framework for designing, validating, and eventually deploying crypto 
 - **Sprint 6 — Backend/API:** versioned FastAPI service for validated project specifications.
 - **Sprint 7 — Explorer & Indexer:** deterministic block/transaction read model with SQLite persistence.
 - **Sprint 8 — Staking:** validated staking policy and deterministic reward calculations.
+- **Sprint 9 — Governance:** policy-driven proposal eligibility, quorum, approval thresholds, cancellation, and timelock planning.
 
-## Sprint 9 — Governance
+## Sprint 10 — DEX/Liquidity
 
-Sprint 9 adds a policy-driven governance layer for proposal eligibility, quorum, approval thresholds, cancellation, and timelock planning.
+Sprint 10 adds a deterministic liquidity-pool planning layer for pair configuration, fee tiers, price bounds, slippage policy, spot-price calculation, and constant-product quote estimation.
 
 ### Scope
 
-- governance policy model and validation
-- token, quadratic, and one-wallet-one-vote policy identifiers
-- proposal threshold validation
-- quorum and approval-threshold validation
-- voting-period and timelock controls
-- proposal model with typed proposal categories
-- proposer, voting-power, and vote-bound validation
-- deterministic outcomes: passed, rejected, quorum_not_met, cancelled, invalid
-- governance CLI validation and proposal evaluation
-- governance JSON Schema
-- API endpoints for policy and proposal evaluation
+- liquidity-pool model and validation
+- base/quote asset pair checks
+- fee-tier and slippage-bounds policy
+- initial liquidity validation
+- price-range controls
+- deterministic spot-price and quote calculation
+- DEX CLI validation and quote commands
+- DEX JSON Schema
+- FastAPI endpoints for pool summary and quote estimation
 - unit tests and CI smoke coverage
 
 ### Commands
@@ -37,26 +36,25 @@ Sprint 9 adds a policy-driven governance layer for proposal eligibility, quorum,
 ```bash
 pip install -r requirements.txt
 pytest -q
-python -m cli.governance_cli validate config/examples/example-governance.yaml
-python -m cli.governance_cli evaluate config/examples/example-governance.yaml p-001 \
-  "Increase treasury budget" treasury_spend alice 2000 10000 3000 1000
+python -m cli.dex_cli validate config/examples/example-dex.yaml
+python -m cli.dex_cli quote config/examples/example-dex.yaml 1000
 uvicorn api.app:app --reload
 ```
 
-### Governance API
+### DEX API
 
 ```text
-GET /v1/governance
-GET /v1/governance/evaluate?proposal_id=p-001&title=Increase%20treasury%20budget&proposal_type=treasury_spend&proposer=alice&voting_power=2000&total_voting_power=10000&yes_votes=3000&no_votes=1000
+GET /v1/dex
+GET /v1/dex/quote?base_input=1000
 ```
 
-Governance evaluation is a deterministic planning and validation utility. It does not execute on-chain proposals, custody voting assets, authenticate wallets, prevent sybil attacks, or replace protocol-level governance contracts, snapshot logic, or security review. Timelock and guardian controls must be reconciled with the final runtime before deployment.
+DEX calculations are planning utilities, not a live exchange. They do not execute swaps, custody funds, route across venues, account for oracle manipulation, MEV, market impact beyond the constant-product estimate, or replace audited AMM contracts and integration testing. Fee tiers and price bounds must be reconciled with the selected protocol before deployment.
 
 ## Project status
 
-**Sprint 9: Governance — complete**
+**Sprint 10: DEX/Liquidity — complete**
 
-Next: **Sprint 10 — DEX/Liquidity**.
+Next: **Sprint 11 — Testnet/Deployment Readiness**.
 
 ## Design principle
 
