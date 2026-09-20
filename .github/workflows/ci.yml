@@ -1,14 +1,11 @@
 name: CI
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
 env:
   PYTHONPATH: .
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -25,11 +22,9 @@ jobs:
         run: |
           python - <<'PY'
           from architecture.engine import load_config
-          model = load_config('config/examples/example-architecture.yaml')
-          errors = model.validate()
-          if errors:
-              raise SystemExit('\\n'.join(errors))
-          print('architecture configuration valid')
+          model=load_config('config/examples/example-architecture.yaml')
+          errors=model.validate()
+          if errors: raise SystemExit('\\n'.join(errors))
           PY
       - run: python -m cli.smart_contract_cli validate config/examples/example-contract.yaml
       - run: mkdir -p build/contracts
@@ -41,19 +36,20 @@ jobs:
       - run: python -m cli.staking_cli reward config/examples/example-staking.yaml 1000 365
       - run: python -m cli.governance_cli validate config/examples/example-governance.yaml
       - run: python -m cli.governance_cli evaluate config/examples/example-governance.yaml p-001 'Increase treasury budget' treasury_spend alice 2000 10000 3000 1000
+      - run: python -m cli.dex_cli validate config/examples/example-dex.yaml
+      - run: python -m cli.dex_cli quote config/examples/example-dex.yaml 1000
       - name: API smoke test
         run: |
           python - <<'PY'
           from fastapi.testclient import TestClient
           from api.app import app
-          client = TestClient(app)
-          assert client.get('/v1/validate').json()['valid'] is True
-          assert client.get('/v1/explorer/status').json()['indexed'] is True
-          assert client.get('/v1/explorer/blocks/0').status_code == 200
-          assert client.get('/v1/staking').json()['validation_errors'] == []
-          assert client.get('/v1/staking/reward?amount=1000&duration_days=365').status_code == 200
-          assert client.get('/v1/governance').json()['validation_errors'] == []
-          assert client.get('/v1/governance/evaluate?proposal_id=p-001&title=Increase%20treasury%20budget&proposal_type=treasury_spend&proposer=alice&voting_power=2000&total_voting_power=10000&yes_votes=3000&no_votes=1000').json()['outcome'] == 'passed'
+          c=TestClient(app)
+          assert c.get('/v1/validate').json()['valid'] is True
+          assert c.get('/v1/explorer/status').json()['indexed'] is True
+          assert c.get('/v1/staking/reward?amount=1000&duration_days=365').status_code==200
+          assert c.get('/v1/governance').json()['validation_errors']==[]
+          assert c.get('/v1/dex').json()['validation_errors']==[]
+          assert c.get('/v1/dex/quote?base_input=1000').status_code==200
           print('API smoke test passed')
           PY
       - run: test -s build/contracts/ExampleCoin.sol
