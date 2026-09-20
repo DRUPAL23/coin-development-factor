@@ -1,0 +1,11 @@
+dex:
+  pool_id: "ace-exc-usdc"
+  base_asset: "EXC"
+  quote_asset: "USDC"
+  fee_tier: "0.003"
+  initial_base: "1000000"
+  initial_quote: "100000"
+  min_price: "0.05"
+  max_price: "0.20"
+  slippage_bps: 100
+  enabled: true
