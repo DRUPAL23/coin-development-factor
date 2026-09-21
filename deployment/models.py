@@ -5,6 +5,11 @@ from typing import Any
 
 SUPPORTED_ENVIRONMENTS = {"local", "testnet", "staging", "mainnet"}
 SUPPORTED_PROVIDERS = {"docker", "kubernetes", "managed"}
+REQUIRED_READINESS_CHECKS = (
+    "genesis_published",
+    "monitoring_configured",
+    "backups_configured",
+)
 
 @dataclass(frozen=True)
 class DeploymentSpec:
@@ -43,6 +48,7 @@ class DeploymentSpec:
             "explorer_configured": bool(self.explorer_url),
             "container_image_configured": bool(self.image),
             "secrets_declared": bool(self.secrets_required),
-            **self.readiness,
+            **{name: self.readiness.get(name, False) for name in REQUIRED_READINESS_CHECKS},
+            **{name: value for name, value in self.readiness.items() if name not in REQUIRED_READINESS_CHECKS},
         }
         return {"ready": all(checks.values()), "checks": checks}
