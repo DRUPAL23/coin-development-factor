@@ -1,0 +1,20 @@
+deployment:
+  name: "Example Coin Testnet"
+  environment: "testnet"
+  provider: "docker"
+  chain_id: 7777
+  rpc_url: "https://rpc.testnet.example.org"
+  explorer_url: "https://explorer.testnet.example.org"
+  image: "ghcr.io/example/coin-node:0.1.0"
+  replicas: 2
+  validators: 4
+  secrets_required:
+    - "VALIDATOR_KEY_1"
+    - "RPC_AUTH_TOKEN"
+  readiness:
+    genesis_published: true
+    monitoring_configured: true
+    backups_configured: true
+  resources:
+    cpu: "1"
+    memory: "2Gi"
