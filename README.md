@@ -13,22 +13,23 @@ A reusable framework for designing, validating, and eventually deploying crypto 
 - **Sprint 7 — Explorer & Indexer:** deterministic block/transaction read model with SQLite persistence.
 - **Sprint 8 — Staking:** validated staking policy and deterministic reward calculations.
 - **Sprint 9 — Governance:** policy-driven proposal eligibility, quorum, approval thresholds, cancellation, and timelock planning.
+- **Sprint 10 — DEX/Liquidity:** pool configuration, fee tiers, price bounds, slippage policy, and constant-product quotes.
+- **Sprint 11 — Testnet/Deployment Readiness:** environment-aware deployment policy, RPC/explorer gates, validator minimums, secret declarations, operational readiness checks, API, CLI, schema, tests, and CI validation.
 
-## Sprint 10 — DEX/Liquidity
+## Sprint 11 — Testnet/Deployment Readiness
 
-Sprint 10 adds a deterministic liquidity-pool planning layer for pair configuration, fee tiers, price bounds, slippage policy, spot-price calculation, and constant-product quote estimation.
+Sprint 11 adds a deployment-readiness layer that validates whether a configured testnet, staging, local, or mainnet rollout has the minimum technical and operational controls declared before deployment.
 
 ### Scope
 
-- liquidity-pool model and validation
-- base/quote asset pair checks
-- fee-tier and slippage-bounds policy
-- initial liquidity validation
-- price-range controls
-- deterministic spot-price and quote calculation
-- DEX CLI validation and quote commands
-- DEX JSON Schema
-- FastAPI endpoints for pool summary and quote estimation
+- environment and provider policy
+- chain ID, RPC, explorer, and node image configuration
+- replica and validator minimums
+- mainnet HTTPS enforcement
+- required-secret declarations without handling secret values
+- operational readiness checks for genesis, monitoring, backups, and related controls
+- deployment CLI and JSON Schema
+- FastAPI deployment summary and aggregate validation endpoint
 - unit tests and CI smoke coverage
 
 ### Commands
@@ -36,25 +37,24 @@ Sprint 10 adds a deterministic liquidity-pool planning layer for pair configurat
 ```bash
 pip install -r requirements.txt
 pytest -q
-python -m cli.dex_cli validate config/examples/example-dex.yaml
-python -m cli.dex_cli quote config/examples/example-dex.yaml 1000
+python -m cli.deployment_cli config/examples/example-deployment.yaml --json
 uvicorn api.app:app --reload
 ```
 
-### DEX API
+### Deployment API
 
 ```text
-GET /v1/dex
-GET /v1/dex/quote?base_input=1000
+GET /v1/deployment
+GET /v1/validate
 ```
 
-DEX calculations are planning utilities, not a live exchange. They do not execute swaps, custody funds, route across venues, account for oracle manipulation, MEV, market impact beyond the constant-product estimate, or replace audited AMM contracts and integration testing. Fee tiers and price bounds must be reconciled with the selected protocol before deployment.
+The deployment layer is a readiness gate, not an infrastructure provisioner. It does not create cloud resources, generate validator keys, store secrets, publish genesis files, deploy contracts, or prove that an RPC endpoint is reachable. Production rollout still requires environment-specific IaC, secret management, monitoring, backups, incident response, security review, and an operator-run deployment checklist.
 
 ## Project status
 
-**Sprint 10: DEX/Liquidity — complete**
+**Sprint 11: Testnet/Deployment Readiness — complete**
 
-Next: **Sprint 11 — Testnet/Deployment Readiness**.
+Next: **Sprint 12 — Audit & Mainnet Launch Controls**.
 
 ## Design principle
 
