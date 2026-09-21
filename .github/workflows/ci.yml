@@ -38,6 +38,7 @@ jobs:
       - run: python -m cli.governance_cli evaluate config/examples/example-governance.yaml p-001 'Increase treasury budget' treasury_spend alice 2000 10000 3000 1000
       - run: python -m cli.dex_cli validate config/examples/example-dex.yaml
       - run: python -m cli.dex_cli quote config/examples/example-dex.yaml 1000
+      - run: python -m cli.deployment_cli config/examples/example-deployment.yaml --json
       - name: API smoke test
         run: |
           python - <<'PY'
@@ -50,6 +51,7 @@ jobs:
           assert c.get('/v1/governance').json()['validation_errors']==[]
           assert c.get('/v1/dex').json()['validation_errors']==[]
           assert c.get('/v1/dex/quote?base_input=1000').status_code==200
+          assert c.get('/v1/deployment').json()['validation_errors']==[]
           print('API smoke test passed')
           PY
       - run: test -s build/contracts/ExampleCoin.sol
