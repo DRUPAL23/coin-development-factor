@@ -1,0 +1,27 @@
+audit:
+  name: acecoin-mainnet-launch
+  release_version: 1.0.0
+  network: mainnet
+  change_freeze: true
+  rollback_window_minutes: 60
+  signoff_roles: [security, operations, product, legal]
+  controls:
+    security_audit_complete: true
+    key_ceremony_rehearsed: true
+    rollback_plan_tested: true
+    incident_response_approved: true
+    legal_review_complete: true
+  evidence:
+    audit_report: docs/audit/2026-09-security-audit.md
+    key_ceremony: docs/audit/key-ceremony-rehearsal.md
+    rollback_drill: docs/audit/rollback-drill.md
+    incident_response: docs/audit/incident-response.md
+    legal_review: docs/audit/legal-review.md
+  findings:
+    - finding_id: AUD-001
+      severity: medium
+      title: Monitoring alert thresholds documented
+      status: resolved
+      owner: operations
+      evidence: docs/audit/monitoring-thresholds.md
+      remediation: Publish thresholds and escalation matrix
