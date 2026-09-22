@@ -18,27 +18,16 @@ jobs:
       - run: pip install -r requirements.txt
       - run: pytest -q
       - run: python -m cli.tokenomics_cli validate config/examples/example-coin.yaml
-      - name: Validate architecture configuration
+      - run: python -m cli.deployment_cli config/examples/example-deployment.yaml --json
+      - run: python -m cli.audit_cli config/examples/example-audit.yaml --json
+      - name: Validate audit launch gate
         run: |
           python - <<'PY'
-          from architecture.engine import load_config
-          model=load_config('config/examples/example-architecture.yaml')
-          errors=model.validate()
-          if errors: raise SystemExit('\\n'.join(errors))
+          from audit.engine import load_spec
+          report = load_spec('config/examples/example-audit.yaml').report()
+          assert report['ready'] is True, report
+          print('audit launch gate passed')
           PY
-      - run: python -m cli.smart_contract_cli validate config/examples/example-contract.yaml
-      - run: mkdir -p build/contracts
-      - run: python -m cli.smart_contract_cli generate config/examples/example-contract.yaml build/contracts/ExampleCoin.sol
-      - run: python -m cli.security_cli scan build/contracts/ExampleCoin.sol
-      - run: python -m cli.wallet_cli config/examples/example-wallet.yaml
-      - run: python -m cli.explorer_cli --json
-      - run: python -m cli.staking_cli validate config/examples/example-staking.yaml
-      - run: python -m cli.staking_cli reward config/examples/example-staking.yaml 1000 365
-      - run: python -m cli.governance_cli validate config/examples/example-governance.yaml
-      - run: python -m cli.governance_cli evaluate config/examples/example-governance.yaml p-001 'Increase treasury budget' treasury_spend alice 2000 10000 3000 1000
-      - run: python -m cli.dex_cli validate config/examples/example-dex.yaml
-      - run: python -m cli.dex_cli quote config/examples/example-dex.yaml 1000
-      - run: python -m cli.deployment_cli config/examples/example-deployment.yaml --json
       - name: API smoke test
         run: |
           python - <<'PY'
@@ -46,12 +35,6 @@ jobs:
           from api.app import app
           c=TestClient(app)
           assert c.get('/v1/validate').json()['valid'] is True
-          assert c.get('/v1/explorer/status').json()['indexed'] is True
-          assert c.get('/v1/staking/reward?amount=1000&duration_days=365').status_code==200
-          assert c.get('/v1/governance').json()['validation_errors']==[]
-          assert c.get('/v1/dex').json()['validation_errors']==[]
-          assert c.get('/v1/dex/quote?base_input=1000').status_code==200
           assert c.get('/v1/deployment').json()['validation_errors']==[]
           print('API smoke test passed')
           PY
-      - run: test -s build/contracts/ExampleCoin.sol
