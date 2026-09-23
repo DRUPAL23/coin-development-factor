@@ -16,26 +16,27 @@ A reusable framework for designing, validating, and eventually deploying crypto 
 - **Sprint 10 — DEX/Liquidity**
 - **Sprint 11 — Testnet/Deployment Readiness**
 - **Sprint 12 — Audit & Mainnet Launch Controls**
+- **Sprint 13 — Wallet/Chain Integration & Production Observability**
 
-## Sprint 12 — Audit & Mainnet Launch Controls
+## Sprint 13 — Wallet/Chain Integration & Production Observability
 
-Sprint 12 adds a release-gating layer for security review, key-ceremony rehearsal, rollback testing, incident-response approval, legal review declaration, change freeze, sign-off roles, and audit finding closure. It produces a deterministic launch report and fails closed for missing required controls or unresolved critical/high findings.
+Sprint 13 adds typed chain endpoint and wallet-adapter configuration, fail-closed integration readiness reporting, production observability declarations, CLI validation, API endpoints, JSON Schema, and CI gates. It keeps network access behind explicit adapters and does not collect seed phrases or private keys.
 
 ### Commands
 
 ```bash
 pip install -r requirements.txt
 pytest -q
-python -m cli.audit_cli config/examples/example-audit.yaml --json
+python -m cli.integration_cli config/examples/example-integration.yaml --json
 ```
 
-The audit layer records declarations and evidence references; it does not replace an independent security audit, legal opinion, operational approval, or real-world incident drill.
+The integration layer validates configuration and readiness declarations; it does not claim live network reachability or replace operational monitoring.
 
 ## Project status
 
-**Sprint 12: Audit & Mainnet Launch Controls — complete**
+**Sprint 13: Wallet/Chain Integration & Production Observability — complete**
 
-Next: **Sprint 13 — Wallet/Chain Integration & Production Observability**.
+Next: **Sprint 14 — Release Automation & Disaster-Recovery Exercises**.
 
 ## Design principle
 
