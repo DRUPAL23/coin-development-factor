@@ -1,0 +1,21 @@
+integration:
+  name: acecoin-mainnet
+  chain_id: 4242
+  native_symbol: ACE
+  wallet_adapter: external
+  endpoints:
+    - name: rpc
+      url: https://rpc.example.invalid
+      transport: http
+      timeout_seconds: 5
+      required: true
+    - name: websocket
+      url: wss://ws.example.invalid
+      transport: websocket
+      timeout_seconds: 5
+      required: false
+  observability:
+    metrics_enabled: true
+    structured_logging_enabled: true
+    tracing_enabled: true
+    healthcheck_interval_seconds: 30
