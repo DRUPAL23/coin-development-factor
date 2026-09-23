@@ -20,6 +20,7 @@ jobs:
       - run: python -m cli.tokenomics_cli validate config/examples/example-coin.yaml
       - run: python -m cli.deployment_cli config/examples/example-deployment.yaml --json
       - run: python -m cli.audit_cli config/examples/example-audit.yaml --json
+      - run: python -m cli.integration_cli config/examples/example-integration.yaml --json
       - name: Validate audit launch gate
         run: |
           python - <<'PY'
@@ -27,6 +28,14 @@ jobs:
           report = load_spec('config/examples/example-audit.yaml').report()
           assert report['ready'] is True, report
           print('audit launch gate passed')
+          PY
+      - name: Validate integration observability gate
+        run: |
+          python - <<'PY'
+          from integration.engine import load_spec
+          report = load_spec('config/examples/example-integration.yaml').health_report()
+          assert report['ready'] is True, report
+          print('integration observability gate passed')
           PY
       - name: API smoke test
         run: |
@@ -36,5 +45,7 @@ jobs:
           c=TestClient(app)
           assert c.get('/v1/validate').json()['valid'] is True
           assert c.get('/v1/deployment').json()['validation_errors']==[]
+          assert c.get('/v1/integration').json()['validation_errors']==[]
+          assert c.get('/v1/observability').json()['status']=='healthy'
           print('API smoke test passed')
           PY
