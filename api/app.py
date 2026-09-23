@@ -15,8 +15,9 @@ from governance.models import Proposal
 from staking.engine import calculate_reward, load_policy
 from tokenomics.engine import calculate as calculate_tokenomics
 from wallets.engine import load_spec as load_wallets
+from integration.engine import load_spec as load_integration, summary as integration_summary
 ROOT=Path(__file__).resolve().parents[1]
-app=FastAPI(title='Coin Development Factory API',version='1.1.0')
+app=FastAPI(title='Coin Development Factory API',version='1.2.0')
 EXPLORER=Indexer(); EXPLORER.add_block(Block(0,'0x'+'0'*64,'0x'+'0'*64,1,0))
 class ValidationResponse(BaseModel):
     valid: bool
@@ -59,9 +60,15 @@ def dex_quote(base_input:str=Query(...))->dict[str,str]:
     except (ValueError,ArithmeticError) as exc: raise HTTPException(400,str(exc)) from exc
 @app.get('/v1/deployment')
 def deployment()->dict[str,Any]: return deployment_summary(load_deployment(ROOT/'config/examples/example-deployment.yaml'))
+@app.get('/v1/integration')
+def integration()->dict[str,Any]: return integration_summary(load_integration(ROOT/'config/examples/example-integration.yaml'))
+@app.get('/v1/observability')
+def observability()->dict[str,Any]:
+    report=integration_summary(load_integration(ROOT/'config/examples/example-integration.yaml'))['health']
+    return {'status':'healthy' if report['ready'] else 'degraded','checks':report['checks']}
 @app.get('/v1/validate',response_model=ValidationResponse)
 def validate_all()->ValidationResponse:
-    models=[load_architecture(ROOT/'config/examples/example-architecture.yaml'),load_wallets(ROOT/'config/examples/example-wallet.yaml'),load_contract(ROOT/'config/examples/example-contract.yaml'),load_policy(ROOT/'config/examples/example-staking.yaml'),load_governance(ROOT/'config/examples/example-governance.yaml'),load_pool(ROOT/'config/examples/example-dex.yaml'),load_deployment(ROOT/'config/examples/example-deployment.yaml')]
+    models=[load_architecture(ROOT/'config/examples/example-architecture.yaml'),load_wallets(ROOT/'config/examples/example-wallet.yaml'),load_contract(ROOT/'config/examples/example-contract.yaml'),load_policy(ROOT/'config/examples/example-staking.yaml'),load_governance(ROOT/'config/examples/example-governance.yaml'),load_pool(ROOT/'config/examples/example-dex.yaml'),load_deployment(ROOT/'config/examples/example-deployment.yaml'),load_integration(ROOT/'config/examples/example-integration.yaml')]
     errors=[]
     for m in models: errors.extend(m.validate())
     return ValidationResponse(valid=not errors,errors=errors)
