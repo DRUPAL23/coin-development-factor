@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["release"],
+  "properties": {
+    "release": {
+      "type": "object",
+      "required": ["version", "artifact_digest", "signed", "reproducible_build", "changelog_present", "rollback_plan_present", "approvals", "disaster_recovery"],
+      "properties": {
+        "version": {"type": "string", "minLength": 1},
+        "artifact_digest": {"type": "string", "pattern": "^sha256:.+"},
+        "signed": {"type": "boolean", "const": true},
+        "reproducible_build": {"type": "boolean", "const": true},
+        "changelog_present": {"type": "boolean", "const": true},
+        "rollback_plan_present": {"type": "boolean", "const": true},
+        "approvals": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}},
+        "disaster_recovery": {
+          "type": "object",
+          "required": ["backup_verified", "restore_tested", "recovery_point_objective_minutes", "recovery_time_objective_minutes", "runbook_url", "owner"],
+          "properties": {
+            "backup_verified": {"type": "boolean", "const": true},
+            "restore_tested": {"type": "boolean", "const": true},
+            "recovery_point_objective_minutes": {"type": "integer", "exclusiveMinimum": 0},
+            "recovery_time_objective_minutes": {"type": "integer", "exclusiveMinimum": 0},
+            "runbook_url": {"type": "string", "minLength": 1},
+            "owner": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    }
+  }
+}
