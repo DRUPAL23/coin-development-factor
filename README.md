@@ -17,26 +17,27 @@ A reusable framework for designing, validating, and eventually deploying crypto 
 - **Sprint 11 — Testnet/Deployment Readiness**
 - **Sprint 12 — Audit & Mainnet Launch Controls**
 - **Sprint 13 — Wallet/Chain Integration & Production Observability**
+- **Sprint 14 — Release Automation & Disaster-Recovery Exercises**
 
-## Sprint 13 — Wallet/Chain Integration & Production Observability
+## Sprint 14 — Release Automation & Disaster-Recovery Exercises
 
-Sprint 13 adds typed chain endpoint and wallet-adapter configuration, fail-closed integration readiness reporting, production observability declarations, CLI validation, API endpoints, JSON Schema, and CI gates. It keeps network access behind explicit adapters and does not collect seed phrases or private keys.
+Sprint 14 adds fail-closed release readiness controls for signed artifacts, reproducible builds, changelog and rollback evidence, two-person approval, backup verification, restore testing, RPO/RTO targets, and an owned recovery runbook. The package provides typed models, YAML loading, a JSON Schema, CLI output, tests, and CI gates.
 
 ### Commands
 
 ```bash
 pip install -r requirements.txt
 pytest -q
-python -m cli.integration_cli config/examples/example-integration.yaml --json
+python -m cli.release_cli config/examples/example-release.yaml --json
 ```
 
-The integration layer validates configuration and readiness declarations; it does not claim live network reachability or replace operational monitoring.
+The release layer validates declared evidence and readiness controls; it does not perform signing, backup, restore, or deployment actions itself. Those operations must be implemented by the external release and operations systems and then represented by verified evidence.
 
 ## Project status
 
-**Sprint 13: Wallet/Chain Integration & Production Observability — complete**
+**Sprint 14: Release Automation & Disaster-Recovery Exercises — complete**
 
-Next: **Sprint 14 — Release Automation & Disaster-Recovery Exercises**.
+Next: **Sprint 15 — Mainnet Operations, SLOs & Incident Response**.
 
 ## Design principle
 
