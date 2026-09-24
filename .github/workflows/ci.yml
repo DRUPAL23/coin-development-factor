@@ -21,6 +21,7 @@ jobs:
       - run: python -m cli.deployment_cli config/examples/example-deployment.yaml --json
       - run: python -m cli.audit_cli config/examples/example-audit.yaml --json
       - run: python -m cli.integration_cli config/examples/example-integration.yaml --json
+      - run: python -m cli.release_cli config/examples/example-release.yaml --json
       - name: Validate audit launch gate
         run: |
           python - <<'PY'
@@ -36,6 +37,14 @@ jobs:
           report = load_spec('config/examples/example-integration.yaml').health_report()
           assert report['ready'] is True, report
           print('integration observability gate passed')
+          PY
+      - name: Validate release disaster recovery gate
+        run: |
+          python - <<'PY'
+          from release.engine import load_spec
+          report = load_spec('config/examples/example-release.yaml').readiness_report()
+          assert report['ready'] is True, report
+          print('release disaster recovery gate passed')
           PY
       - name: API smoke test
         run: |
