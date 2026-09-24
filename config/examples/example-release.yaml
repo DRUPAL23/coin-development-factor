@@ -1,0 +1,20 @@
+release:
+  version: "0.14.0"
+  artifact_digest: "sha256:replace-with-build-digest"
+  signed: true
+  reproducible_build: true
+  changelog_present: true
+  rollback_plan_present: true
+  approvals:
+    - release-manager
+    - security-reviewer
+  disaster_recovery:
+    backup_verified: true
+    restore_tested: true
+    recovery_point_objective_minutes: 15
+    recovery_time_objective_minutes: 60
+    runbook_url: "https://example.invalid/runbooks/coin-restore"
+    owner: "operations"
+  metadata:
+    channel: "mainnet"
+    change_window: "approved"
