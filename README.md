@@ -18,26 +18,25 @@ A reusable framework for designing, validating, and eventually deploying crypto 
 - **Sprint 12 — Audit & Mainnet Launch Controls**
 - **Sprint 13 — Wallet/Chain Integration & Production Observability**
 - **Sprint 14 — Release Automation & Disaster-Recovery Exercises**
+- **Sprint 15 — Mainnet Operations, SLOs & Incident Response**
 
-## Sprint 14 — Release Automation & Disaster-Recovery Exercises
+## Sprint 15 — Mainnet Operations, SLOs & Incident Response
 
-Sprint 14 adds fail-closed release readiness controls for signed artifacts, reproducible builds, changelog and rollback evidence, two-person approval, backup verification, restore testing, RPO/RTO targets, and an owned recovery runbook. The package provides typed models, YAML loading, a JSON Schema, CLI output, tests, and CI gates.
+Sprint 15 adds fail-closed operations readiness controls for service-level objectives, paging, metrics, logs, tracing, on-call ownership, status-page ownership, and severity-based incident-response policies. The package provides typed models, YAML loading, a JSON Schema, CLI output, API endpoints, tests, and CI gates.
 
 ### Commands
 
 ```bash
 pip install -r requirements.txt
 pytest -q
-python -m cli.release_cli config/examples/example-release.yaml --json
+python -m cli.operations_cli config/examples/example-operations.yaml --json
 ```
-
-The release layer validates declared evidence and readiness controls; it does not perform signing, backup, restore, or deployment actions itself. Those operations must be implemented by the external release and operations systems and then represented by verified evidence.
 
 ## Project status
 
-**Sprint 14: Release Automation & Disaster-Recovery Exercises — complete**
+**Sprint 15: Mainnet Operations, SLOs & Incident Response — complete**
 
-Next: **Sprint 15 — Mainnet Operations, SLOs & Incident Response**.
+Next: **Sprint 16 — Security Hardening & Key Management Controls**.
 
 ## Design principle
 

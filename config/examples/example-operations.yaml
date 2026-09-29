@@ -1,0 +1,28 @@
+operations:
+  name: acecoin-mainnet-operations
+  service: acecoin-node-api
+  environment: mainnet
+  slos:
+    - name: rpc-availability
+      availability_target: 99.9
+      latency_p95_ms: 500
+      error_rate_target: 1.0
+      window_days: 30
+      owner: sre
+  incident_policies:
+    - severity: sev1
+      acknowledgement_minutes: 5
+      update_interval_minutes: 15
+      escalation_path: [oncall, incident-commander, executive]
+      runbook_url: https://example.invalid/runbooks/sev1
+    - severity: sev2
+      acknowledgement_minutes: 15
+      update_interval_minutes: 30
+      escalation_path: [oncall, service-owner]
+      runbook_url: https://example.invalid/runbooks/sev2
+  paging_enabled: true
+  metrics_enabled: true
+  logs_enabled: true
+  traces_enabled: true
+  oncall_roster: [sre-primary, sre-secondary]
+  status_page_url: https://status.example.invalid
