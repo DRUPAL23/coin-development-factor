@@ -1,0 +1,37 @@
+access:
+  name: acecoin-mainnet-access
+  environment: mainnet
+  provider: vault
+  rotation_automation: true
+  access_reviews: true
+  emergency_logging: true
+  contact: security@example.invalid
+  roles:
+    - role: treasury
+      custody: multisig
+      threshold: 2
+      custodians: [treasury-a, treasury-b, treasury-c]
+      rotation_days: 180
+      hardware_backed: true
+      recovery_url: https://example.invalid/recovery/treasury
+    - role: validator
+      custody: hsm
+      threshold: 1
+      custodians: [validator-ops]
+      rotation_days: 90
+      hardware_backed: true
+      recovery_url: https://example.invalid/recovery/validator
+    - role: deployer
+      custody: multisig
+      threshold: 2
+      custodians: [release-a, release-b, release-c]
+      rotation_days: 90
+      hardware_backed: true
+      recovery_url: https://example.invalid/recovery/deployer
+    - role: backup
+      custody: offline
+      threshold: 2
+      custodians: [backup-a, backup-b]
+      rotation_days: 365
+      hardware_backed: true
+      recovery_url: https://example.invalid/recovery/backup
